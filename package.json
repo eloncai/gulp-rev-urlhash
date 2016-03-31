@@ -1,0 +1,34 @@
+{
+  "name": "gulp-rev-urlhash",
+  "version": "1.0.0",
+  "description": "Static asset revisioning by create manifest.json, you can get assets uri like xxx.js?v=hs27skvi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarcelloCai/gulp-rev-urlhash.git"
+  },
+  "keywords": [
+    "gulp",
+    "rev",
+    "urlhash"
+  ],
+  "author": "MarcelloCai",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MarcelloCai/gulp-rev-urlhash/issues"
+  },
+  "homepage": "https://github.com/MarcelloCai/gulp-rev-urlhash#readme",
+  "dependencies": {
+    "gulp-util": "^3.0.7",
+    "object-assign": "^4.0.1",
+    "path": "^0.12.7",
+    "rev-hash": "^1.0.0",
+    "rev-path": "^1.0.0",
+    "sort-keys": "^1.1.1",
+    "through2": "^2.0.1",
+    "vinyl-file": "^2.0.0"
+  }
+}
