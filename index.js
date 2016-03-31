@@ -7,37 +7,40 @@ var file = require('vinyl-file');
 var revHash = require('rev-hash');
 var revPath = require('rev-path');
 var sortKeys = require('sort-keys');
-var modifyFilename = require('modify-filename');
 
-function relPath(base, filePath) {
-	if (filePath.indexOf(base) !== 0) {
-		return filePath.replace(/\\/g, '/');
-	}
+function relPath(filePath, base, revHash) {
+  var newPath;
 
-	var newPath = filePath.substr(base.length).replace(/\\/g, '/');
+  if (filePath.indexOf(base) !== 0) {
 
-	if (newPath[0] === '/') {
-		return newPath.substr(1);
-	}
+    newPath = filePath.replace(/\\/g, '/');
 
-	return newPath;
+  } else {
+
+    newPath = filePath.substr(base.length).replace(/\\/g, '/');
+    if (newPath[0] === '/') {
+      newPath = newPath.substr(1);
+    }
+
+  }
+
+  return newPath + '?v=' + revHash;
 }
 
 function getManifestFile(opts, cb) {
-	file.read(opts.path, opts, function (err, manifest) {
-		if (err) {
-			// not found
-			if (err.code === 'ENOENT') {
-				cb(null, new gutil.File(opts));
-			} else {
-				cb(err);
-			}
-
-			return;
-		}
-
-		cb(null, manifest);
-	});
+	file.read(opts.path, opts).then(
+    function (manifest) {
+      cb(null, manifest);
+    },
+    function (err) {
+      // not found
+      if (err.code === 'ENOENT') {
+        cb(null, new gutil.File(opts));
+      } else {
+        cb(err);
+      }
+    }
+  );
 }
 
 function transformFilename(file) {
@@ -45,15 +48,6 @@ function transformFilename(file) {
 	file.revOrigPath = file.path;
 	file.revOrigBase = file.base;
 	file.revHash = revHash(file.contents);
-
-  file.path = (function() {
-    var filename = file.path,
-		    hasQuery = filename.indexOf('?');
-    filename = hasQuery === -1 ?
-      (filename + '?v=' + file.revHash) :
-      (filename + '&v=' + file.revHash);
-    return filename;
-  })();
 }
 
 var plugin = function () {
@@ -67,7 +61,7 @@ var plugin = function () {
 		}
 
 		if (file.isStream()) {
-			cb(new gutil.PluginError('gulp-rev', 'Streaming not supported'));
+			cb(new gutil.PluginError('gulp-rev-urlhash', 'Streaming not supported'));
 			return;
 		}
 
@@ -133,7 +127,7 @@ plugin.manifest = function (pth, opts) {
 			return;
 		}
 
-		var revisionedFile = relPath(file.base, file.path);
+    var revisionedFile = relPath(file.path, file.base, file.revHash);
 		var originalFile = path.join(path.dirname(revisionedFile), path.basename(file.revOrigPath)).replace(/\\/g, '/');
 
 		manifest[originalFile] = revisionedFile;
