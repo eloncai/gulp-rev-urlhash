@@ -1,6 +1,6 @@
 {
   "name": "gulp-rev-urlhash",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Static asset revisioning by create manifest.json, you can get assets uri like xxx.js?v=hs27skvi",
   "main": "index.js",
   "scripts": {
