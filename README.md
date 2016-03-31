@@ -2,7 +2,7 @@
 
 Static asset revisioning by create manifest.json, you can get assets uri like xxx.js?v=hs27skvi from manifest.json
 
-It comes from **gulp-rev**, and this plugin will not change your dist filename, but add url query v=XXXXXXXX in the manifest.json instead.
+It comes from [gulp-rev](https://www.npmjs.com/package/gulp-rev), and **this plugin will not change your dist filename, but add url query v=XXXXXXXX in the manifest.json instead**.
 
 You can use manifest.json to get files' latest revisioned name.
 
