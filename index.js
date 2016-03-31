@@ -47,12 +47,13 @@ function transformFilename(file) {
 	file.revHash = revHash(file.contents);
 
   file.path = (function() {
-		var hasQuery = filename.indexOf('?');
+    var filename = file.path,
+		    hasQuery = filename.indexOf('?');
     filename = hasQuery === -1 ?
       (filename + '?v=' + file.revHash) :
       (filename + '&v=' + file.revHash);
     return filename;
-  });
+  })();
 }
 
 var plugin = function () {
